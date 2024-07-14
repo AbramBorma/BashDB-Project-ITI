@@ -1,0 +1,125 @@
+Note that all text commands must be first on line and end with ';'
+
+clear     (\c) Clear the current input statement.
+Clear the current input. Use this if you change your mind about executing the statement that you are entering.
+
+go        (\g) Send command to mysql server.
+Send the current statement to the server to be executed.
+
+print     (\p) Print current command.
+Print the current input statement without executing it.
+
+use       (\u) Use another database. Takes database name as argument.
+Use db_name as the default database.
+
+quit      (\q) Quit mysql.
+
+\quit should always bypass all and quit 
+
+
+Database, table, and column names should not contains space characters or reserved Words.
+Table and Database	Any character that is allowed in a filename, except ‘/’, ‘\’, or ‘.’
+ASCII: [0-9,a-z,A-Z_] (basic Latin letters, digits 0-9, underscore)
+
+
+The table name can be specified as db_name.tbl_name to create the table in a specific database. This works regardless of whether there is a default database, 
+CREATE TABLE t1
+CREATE TABLE lookup (id INT, name STRING)
+
+
+DROP [TEMPORARY] TABLE [IF EXISTS]
+
+
+DELETE tbl_name[.*] [, tbl_name[.*]] ...
+    FROM table_references
+    [WHERE where_condition]
+
+DELETE FROM table_name; Deletes the whole table data where Drop will remove the table with the structure
+
+
+INSERT INTO tbl_name () VALUES();
+
+INSERT INTO tbl_name (col1,col2) VALUES(col2*2,15);
+
+INSERT INTO tbl_name (a,b,c)
+    VALUES(1,2,3), (4,5,6), (7,8,9);
+
+
+-Use of an unqualified * with other items in the select list may produce a parse error. For example:
+SELECT id, * FROM t1
+
+
+-A select_expr can be given an alias using AS alias_name. The alias is used as the expression's -column name and can be used in GROUP BY, ORDER BY, or HAVING clauses. For example:
+
+SELECT CONCAT(last_name,', ',first_name) AS full_name
+  FROM mytable ORDER BY full_name;
+
+
+-The AS keyword is optional when aliasing a select_expr with an identifier. The preceding example -could have been written like this:
+
+SELECT CONCAT(last_name,', ',first_name) full_name
+  FROM mytable ORDER BY full_name;
+
+
+-However, because the AS is optional, a subtle problem can occur if you forget the comma between two -select_expr expressions: MySQL interprets the second as an alias name. For example, in the following -statement, columnb is treated as an alias name:
+
+SELECT columna columnb FROM mytable;
+-For this reason, it is good practice to be in the habit of using AS explicitly when specifying -column aliases.
+
+-Columns selected for output can be referred to in ORDER BY and GROUP BY clauses using column names, -column aliases, or column positions. Column positions are integers and begin with 1:
+
+SELECT college, region, seed FROM tournament
+  ORDER BY region, seed;
+
+SELECT college, region AS r, seed AS s FROM tournament
+  ORDER BY r, s;
+
+SELECT college, region, seed FROM tournament
+  ORDER BY 2, 3;
+
+-selecting the same table twice is not premitted as there is no group by implemented
+
+## in case of not implementing "ORDER BY" & "WHERE" -> "From" should be in poistion -2 
+
+--------------------------------------------------------------
+The Application will be CLI Menu based app, that will provide to user this Menu items:
+Main Menu:
+- Create Database
+CREATE DATABASE database_name;
+
+- List Databases
+SHOW DATABASES;
+
+- Connect To Databases
+USE database_name;
+
+- Drop Database
+DROP DATABASE database_name;
+
+Upon user Connect to Specific Database, there will be new Screen with this Menu:
+- Create Table 
+Explicitly Mentioned
+
+- List Tables
+SHOW TABLES;
+
+- Drop Table
+Explicitly Mentioned
+
+- Insert into Table
+Explicitly Mentioned
+
+- Select From Table
+Explicitly Mentioned
+
+- Delete From Table
+Explicitly Mentioned
+
+- Update Table
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+
+UPDATE employees
+SET last_name = 'Smith'
+WHERE id = 1;

@@ -1,0 +1,13 @@
+create_schema.sh: Script to create a schema (directory).
+create_table.sh: Script to create a table (file with metadata).
+insert_into_table.sh: Script to insert data into a table.
+select_from_table.sh: Script to select data from a table.
+update_table.sh: Script to update data in a table.
+delete_from_table.sh: Script to delete data from a table.
+common.sh: Script containing reusable functions.
+
+check if by default it's case senstive or not and maybe try to loop through all the caiptal letters in names and converrt it to small
+
+if field not given then its null by default
+
+
