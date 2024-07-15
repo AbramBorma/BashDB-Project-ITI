@@ -8,7 +8,7 @@ Main Menu:
 
 Upon user Connect to Specific Database, there will be new Screen with this Menu:
 
-
+Mohamed
 - Create Database
 - Select From Table
 - Update Table
@@ -16,6 +16,8 @@ Upon user Connect to Specific Database, there will be new Screen with this Menu:
 - Drop Database
 
 -----------------------------------------
+
+Abram
 - Connect To Databases // select schema
 - Create Table 
 - Insert into Table
