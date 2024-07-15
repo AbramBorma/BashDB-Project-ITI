@@ -5,7 +5,7 @@ source helperFunctions.sh
 
 if [[ $# -ne 1 ]]
 then
-    printError "$0 is not valid schema name"
+    printError "$* is not valid schema name"
     exit 1
 fi
 
