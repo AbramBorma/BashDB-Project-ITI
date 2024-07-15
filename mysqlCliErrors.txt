@@ -1,0 +1,7 @@
+1- passing 2 args as database name
+mysql> create database test1 test2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 
+
+2- as long as there is no ; it perma wait for reading except commands with "\" and using \c erases the inputs and go back 
+
+3- 
