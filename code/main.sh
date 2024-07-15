@@ -9,13 +9,14 @@ shopt -s nocasematch
 parseCommand(){
     command=$1
     shift
+    
+    # echo $#
 
     case $command in
         CREATE)
-        # in schema case if empty it acts as its created but the system give me error  
-        # incase of multpile args only ffirst one is created
             if [[ $1 == "SCHEMA" ]]; then
-                ./createSchema.sh "$2"
+                shift
+                ./createSchema.sh "$@"
             elif [[ $1 == "TABLE" ]]; then
                 ./createTable.sh "${@:2}"
             else

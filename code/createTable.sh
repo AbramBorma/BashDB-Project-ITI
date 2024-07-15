@@ -5,7 +5,7 @@ source helperFunctions.sh
 # CREATE TABLE t1
 # CREATE TABLE lookup (id INT, name STRING)
 
-if [[ $# -lt 3 ]]
+if [[ $# -lt 2 ]]
 then
     printError "$0 i need to look up on the error messages"
     exit 1
