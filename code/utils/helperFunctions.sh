@@ -33,7 +33,12 @@ isReservedKeyword() {
 validateAndCorrectName() {
     local name="$1"
     name="${name,,}"  # Convert to lowercase
-    
+       
+    if [[ -z "$name" ]]; then
+        printError "Schema name cannot be empty"
+        return 1
+    fi
+
     if isReservedKeyword "$name"; then
         printError "$name is a reserved keyword"
         return 1
