@@ -15,12 +15,12 @@ main_menu() {
 
     case $main_choice in
         1) read -p "Enter your schmema name: " schemaName
-        ./createSchema.sh "$schemaName"
+        ./database/createSchema.sh "$schemaName"
         ;;
-        2) ./listSchemas.sh ;;
-        3) ./selectSchema.sh ;;
-        4) ./deleteSchema.sh ;;
-        5) ./sqlParse.sh ;;
+        2) ./database/listSchemas.sh ;;
+        3) ./database/selectSchema.sh ;;
+        4) ./database/deleteSchema.sh ;;
+        5) ./utils/sqlParse.sh ;;
         6) exit 0 ;;
         *) echo "Invalid option"; main_menu ;;
     esac
