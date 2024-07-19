@@ -33,7 +33,6 @@ isReservedKeyword() {
 validateAndCorrectName() {
     local name="$1"
     name="${name,,}"  # Convert to lowercase
-    name="${name//[\`\'\"]}"  # Remove `, ', and "
     
     if isReservedKeyword "$name"; then
         printError "$name is a reserved keyword"
