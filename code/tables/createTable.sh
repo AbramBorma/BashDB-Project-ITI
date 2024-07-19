@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source helperFunctions.sh
+source ../utils/helperFunctions.sh
 
 # CREATE TABLE t1
 # CREATE TABLE lookup (id INT, name STRING)

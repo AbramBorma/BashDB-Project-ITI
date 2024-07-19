@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source helperFunctions.sh
+source ./utils/helperFunctions.sh
 
 
 if [[ $# -ne 1 ]]
@@ -9,16 +9,20 @@ then
     exit 1
 fi
 
-schemaName=$(validateAndCorrectName "$1")
-if [[ $? -ne 0 ]]; then
+validation=$(validateAndCorrectName "$1")
+echo $validation
+status=$?
+
+if [[ $status -ne 0 ]]; then
     exit 1
 fi
+schemaName=$(echo "$validation" | tail -n 1)
 
-if [[ -d "$schemaName" ]]
+if [[ -d "../mySchemas/$schemaName" ]]
 then
     printError "$schemaName already exists"
     exit 1
 fi
 
-mkdir "$schemaName"
+mkdir "../mySchemas/$schemaName"
 echo "Schema $schemaName created"

@@ -11,15 +11,16 @@ main_menu() {
     echo "4- Drop Schema"
     echo "5- Enter SQL mode"
     echo "6- Exit"
+    echo "$(ls)"
     read -p "Choose an option: " main_choice
 
     case $main_choice in
         1) read -p "Enter your schmema name: " schemaName
-        ./database/createSchema.sh "$schemaName"
+        ./databases/createSchema.sh "$schemaName"
         ;;
-        2) ./database/listSchemas.sh ;;
-        3) ./database/selectSchema.sh ;;
-        4) ./database/deleteSchema.sh ;;
+        2) ./databases/listSchemas.sh ;;
+        3) ./databases/selectSchema.sh ;;
+        4) ./databases/deleteSchema.sh ;;
         5) ./utils/sqlParse.sh ;;
         6) exit 0 ;;
         *) echo "Invalid option"; main_menu ;;
