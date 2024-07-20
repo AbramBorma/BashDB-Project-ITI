@@ -5,7 +5,7 @@ printError() {
     echo "Error: $1" 
 }
 checkSchemaExistance(){
-    if [[ ! -d  "$1" ]]
+    if [[ ! -d  "$DB_ROOT/$1" ]]
     then
         printError "Schema $! doesn't exist"
         return 1

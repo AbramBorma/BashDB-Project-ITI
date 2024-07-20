@@ -18,12 +18,7 @@ listDatabases
 
 deleteSchema() {
     local schemaName="$1"
-    
-    if [[ ! -d "../mySchemas/$schemaName" ]]; then
-        printError "Schema $schemaName does not exist"
-        return 1
-    fi
-
+    checkSchemaExistance "$schemaName"
     rm -r "../mySchemas/$schemaName"
     echo "Schema $schemaName dropped"
     return 0
