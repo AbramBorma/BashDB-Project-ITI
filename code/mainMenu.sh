@@ -18,7 +18,12 @@ main_menu() {
         ./databases/createSchema.sh "$schemaName"
         ;;
         2) ./databases/listSchemas.sh ;;
-        3) ./databases/selectSchema.sh ;;
+        3)  
+            selectedSchema=$(./databases/listSchemas.sh)
+            if [[ $? -eq 0 ]]; then
+            ./databases/selectSchema.sh "$selectedSchema" 
+            fi
+        ;;
         4) ./databases/deleteSchema.sh ;;
         5) ./utils/sqlParse.sh ;;
         6) exit 0 ;;
