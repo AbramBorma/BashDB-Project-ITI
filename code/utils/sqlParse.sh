@@ -10,7 +10,7 @@ parseCommand(){
     command=$1
     shift
     
-    # echo $#
+    # echo "$@"
 
     case $command in
         CREATE)
@@ -24,6 +24,7 @@ parseCommand(){
             fi
         ;;
         INSERT)
+            
         ;;
         SELECT)
         ;;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source helperFunctions.sh
+source ../utils/helperFunctions.sh
 
 # CREATE TABLE t1
 # CREATE TABLE lookup (id INT, name STRING)
@@ -25,7 +25,7 @@ metaPath="$schemaName/${tableName}_meta.txt"
 
 if [ -f "$tablePath" ] 
 then
-    print_error "Table $tableName already exists in schema $schemaName"
+    printError "Table $tableName already exists in schema $schemaName"
     exit 1
 fi
 
