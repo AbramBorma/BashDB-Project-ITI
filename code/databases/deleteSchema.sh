@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ./utils/helperFunctions.sh
+source ../utils/helperFunctions.sh
 
 deleteSchema() {
     local schemaName="$1"
@@ -25,10 +25,12 @@ deleteSchemaMenu() {
     local schemas=()
     for schema in ../mySchemas/*; do
         if [[ -d "$schema" ]]; then
+        #  The basename command strips the directory path.
             schemas+=("$(basename "$schema")")
         fi
     done
 
+# ${#array[@]} gives the number of elements in an array.
     if [[ $schemaNumber -lt 1 || $schemaNumber -gt ${#schemas[@]} ]]; then
         printError "Invalid selection"
         return 1

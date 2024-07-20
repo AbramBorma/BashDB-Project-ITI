@@ -25,7 +25,7 @@ metaPath="$schemaName/${tableName}_meta.txt"
 
 if [ -f "$tablePath" ] 
 then
-    print_error "Table $tableName already exists in schema $schemaName"
+    printError "Table $tableName already exists in schema $schemaName"
     exit 1
 fi
 
