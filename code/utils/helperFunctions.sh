@@ -105,3 +105,28 @@ checkColumnExistance() {
         return 1
     fi
 }
+
+isInteger() {
+    local value="$1"
+    [[ "$value" =~ ^-?[0-9]+$ ]]
+}
+
+checkPrimaryKeyConstraint() {
+    local schema="$1"
+    local table="$2"
+    local column="$3"
+    local value="$4"
+    local header
+    local pkIndex
+
+    header=$(head -n 3 "$DB_ROOT/$schema/$table")
+    pkIndex=$(awk -F: '{ if ($3 == "pk") print NR }' <<< "$header")
+
+    if [ "$pkIndex" -eq "$column" ]; then
+        if grep -q -F "$value" <(awk -F: '{print $'"$column"'}' "$DB_ROOT/$schema/$table"); then
+            printError "Primary key constraint violation: $value already exists"
+            return 1
+        fi
+    fi
+    return 0
+}
