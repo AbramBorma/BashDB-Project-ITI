@@ -11,7 +11,7 @@ main_menu() {
     echo "4- Drop Schema"
     echo "5- Enter SQL mode"
     echo "6- Exit"
-    read -p "Choose an option: " main_choice
+    read -r -p "Choose an option: " main_choice
 
     case $main_choice in
         1) read -r -p "Enter your schmema name: " schemaName

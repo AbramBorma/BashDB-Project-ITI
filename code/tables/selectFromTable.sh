@@ -7,7 +7,7 @@ selectFromTable() {
     local column="$3"
     local value="$4"
     # go to match the col then if we match we go to match rows 
-    awk -F: -v col="$column" -v val="$value" '
+    awk -F'|' -v col="$column" -v val="$value" '
     NR == 1 { split($0, cols, FS) }
     NR > 3 {
         for (i = 1; i <= NF; i++) {
@@ -30,24 +30,33 @@ returnAllColData() {
     shift 2
     local columns=("$@")
 
- awk -F: -v cols="${columns[*]}" '
-    BEGIN { split(cols, c, " ") }
+    awk -F'|' -v cols="${columns[*]}" '
+    BEGIN { 
+        split(cols, c, " ")
+    }
     NR == 1 { 
-        header = ""
         for (i = 1; i <= NF; i++) {
-            for (j in c) {
-                if ($i == c[j]) {
-                    idx[c[j]] = i
-                    header = header $i " "
-                }
+            colname[$i] = i
+        }
+        header = ""
+        for (j in c) {
+            if (header == "") {
+                header = c[j]
+            } else {
+                header = header "|" c[j]
             }
         }
         print header
     }
-    NR > 3 {
+    NR > 4 {
         line = ""
-        for (i in idx) {
-            line = line $idx[i] " "
+        for (j in c) {
+            col_idx = colname[c[j]]
+            if (line == "") {
+                line = $col_idx
+            } else {
+                line = line "|" $col_idx
+            }
         }
         print line
     }' "$DB_ROOT/$schema/$table"
