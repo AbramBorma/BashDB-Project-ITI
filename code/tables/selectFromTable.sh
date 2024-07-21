@@ -1,6 +1,6 @@
 #!/bin/bash
 source ./utils/helperFunctions.sh
-# echo $(pwd)
+DB_ROOT="../mySchemas"
 selectFromTable() {
     local schema="$1"
     local table="$2"
