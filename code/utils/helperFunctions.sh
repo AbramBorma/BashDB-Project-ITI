@@ -98,7 +98,7 @@ checkColumnExistance() {
         return 1
     fi
 
-    if [[ "$header" =~ (^|:)"$column"(:|$) ]]; then
+    if [[ "$header" =~ (^|'|')"$column"('|'|$) ]]; then
         return 0
     else
         printError "Column '$column' doesn't exist in table '$table' within schema '$schema'"
@@ -120,10 +120,10 @@ checkPrimaryKeyConstraint() {
     local pkIndex
 
     header=$(head -n 3 "$DB_ROOT/$schema/$table")
-    pkIndex=$(awk -F: '{ if ($3 == "pk") print NR }' <<< "$header")
+    pkIndex=$(awk -F'|' '{ if ($3 == "pk") print NR }' <<< "$header")
 
     if [ "$pkIndex" -eq "$column" ]; then
-        if grep -q -F "$value" <(awk -F: '{print $'"$column"'}' "$DB_ROOT/$schema/$table"); then
+        if grep -q -F "$value" <(awk -F'|' '{print $'"$column"'}' "$DB_ROOT/$schema/$table"); then
             printError "Primary key constraint violation: $value already exists"
             return 1
         fi
