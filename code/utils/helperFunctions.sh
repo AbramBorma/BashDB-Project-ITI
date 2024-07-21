@@ -87,3 +87,21 @@ navigationMenu () {
     esac
     exit 0
 }
+checkColumnExistance() {
+    local schema="$1"
+    local table="$2"
+    local column="$3"
+    local header
+    header=$(head -n 1 "$DB_ROOT/$schema/$table")
+    if [[ -z "$header" ]]; then
+        printError "The table header is empty or the table does not exist"
+        return 1
+    fi
+
+    if [[ "$header" =~ (^|:)"$column"(:|$) ]]; then
+        return 0
+    else
+        printError "Column '$column' doesn't exist in table '$table' within schema '$schema'"
+        return 1
+    fi
+}
