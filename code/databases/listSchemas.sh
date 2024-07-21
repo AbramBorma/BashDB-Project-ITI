@@ -1,21 +1,31 @@
 #!/bin/bash
 
+source ./utils/helperFunctions.sh
 DB_ROOT="../mySchemas"
 
-echo "The Available Schemas Are:"
+listDatabases() {
 
-for schema in "$DB_ROOT"/*
+    echo "The Available Schemas Are:"
 
-do
+    for schema in "$DB_ROOT"/*
 
-    if [[ -d "$schema" ]]
+    do
 
-    then
+        if [[ -d "$schema" ]]
 
-        echo  "$(basename "$schema")"
+        then
 
-    fi
+            echo  "$(basename "$schema")"
+        fi
 
-done
+    done
 
+}
 
+listDatabases
+
+cd ../code
+
+echo "*****************************"
+
+navigationMenu

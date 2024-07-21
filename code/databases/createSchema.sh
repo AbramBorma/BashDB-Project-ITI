@@ -22,6 +22,5 @@ then
     printError "$schemaName already exists"
     exit 1
 fi
-
 mkdir "../mySchemas/$schemaName"
 echo "Schema $schemaName created"

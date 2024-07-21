@@ -1,6 +1,20 @@
 #!/bin/bash
 
-source ../utils/helperFunctions.sh
+source ./utils/helperFunctions.sh
+
+# Start Update from Abram
+listDatabases() {
+    DB_ROOT="../mySchemas"
+    echo "The Available Schemas Are:"
+    for schema in "$DB_ROOT"/*; do
+        if [[ -d "$schema" ]]; then
+            echo "$(basename "$schema")"
+        fi
+    done
+}
+
+listDatabases
+# End Update from Abram
 
 deleteSchema() {
     local schemaName="$1"
@@ -16,7 +30,9 @@ deleteSchema() {
 }
 
 deleteSchemaMenu() {
-    ./listSchemas.sh
+
+    # removed the listSchemas.sh call from here
+
     if [[ $? -ne 0 ]]; then
         return 1
     fi

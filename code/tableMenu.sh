@@ -1,11 +1,9 @@
 #!/bin/bash
-
 source ./utils/helperFunctions.sh
 DB_ROOT="../mySchemas"
-
-"cd ./$DB_ROOT" 
+ 
 schemaName="$1"
-checkSchemaExistance "$schemaName"
+checkSchemaExistance "$DB_ROOT/$schemaName"
 
 table_menu() {
     echo "Connected to schema: $schemaName"
@@ -15,7 +13,8 @@ table_menu() {
     echo "4- Delete entire table"
     echo "5- insert into table"
     echo "6- update table content"
-    echo "6- Exit"
+    echo "7- Back to Main Menu"
+    echo "8- Exit"
     read -r -p "Choose an option: " table_choice
 
      case $table_choice in
@@ -41,7 +40,9 @@ table_menu() {
             ./tables/updateTable.sh "$schemaName" "$selectedTable" 
         fi
         ;;
-        7) cd ..; return 0 ;;
+        7) source ./mainMenu.sh && main_menu ;;
+        8) cd ..; return 0 ;;
+
         *) echo "Invalid option"; table_menu;;
     esac
 }

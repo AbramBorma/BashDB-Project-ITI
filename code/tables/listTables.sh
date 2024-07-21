@@ -1,5 +1,6 @@
 #!/bin/bash
-source ../utils/helperFunctions.sh
+pwd
+source ./utils/helperFunctions.sh
 
 listTables(){
     local schemaName="$1"
