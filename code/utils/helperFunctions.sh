@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 printError() {
     echo "Error: $1" 
 }
@@ -52,4 +53,27 @@ validateAndCorrectName() {
 
     echo "$name"
     return 0
+}
+
+navigationMenu () {
+
+    echo "What do you want to do?"
+    echo "1- Go to Schemas Menu."
+    echo "2- Go to Tables Menu."
+    echo "3 Exit"
+    read -r -p "Choose an option: " option
+
+    case $option in
+
+        1) source ./mainMenu.sh && main_menu
+    ;;
+        2) source ./tableMenu.sh && table_menu
+    ;;
+        3) exit 0
+    ;;
+        *) echo "Invalid Option!"; navigationMenu
+    ;;
+
+    esac
+    exit 0
 }

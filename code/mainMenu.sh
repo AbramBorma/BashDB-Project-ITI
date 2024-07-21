@@ -18,7 +18,8 @@ main_menu() {
         ./databases/createSchema.sh "$schemaName"
         ;;
         2) ./databases/listSchemas.sh ;;
-        3)  ./databases/listSchemas.sh ;;
+        3) source ./databases/selectSchema.sh
+           source ./tableMenu.sh "$dbName" && table_menu;;
         4) ./databases/deleteSchema.sh ;;
         5) ./utils/sqlParse.sh ;;
         6) exit 0 ;;

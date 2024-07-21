@@ -1,7 +1,7 @@
 #!/bin/bash
-
 source ./utils/helperFunctions.sh
-source ./tableMenu.sh
+
+DB_ROOT="../mySchemas"
 
 while true
 do
@@ -40,8 +40,6 @@ echo "Connecting to schema: $dbName"
 
 sleep 2
 
-cd "$DB_ROOT/$dbName"
+# source ./tableMenu.sh "$dbName" && table_menu 
 
-
-
-table_menu
+export dbName
