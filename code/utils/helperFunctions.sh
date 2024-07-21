@@ -34,7 +34,7 @@ isReservedKeyword() {
 validateAndCorrectName() {
     local name="$1"
     name="${name,,}"  # Convert to lowercase
-       
+    
     if [[ -z "$name" ]]; then
         printError "Schema name cannot be empty"
         return 1
@@ -45,8 +45,18 @@ validateAndCorrectName() {
         return 1
     fi
 
+    # Remove any leading non-alphabetic characters
+    # Parameter Expansion Syntax: 
+    # ${parameter#pattern}
+
+    name="${name#[^a-z]*}"
+
     if [[ ! "$name" =~ ^[a-z_][a-z0-9_]*$ ]]; then
-        local corrected_name="${name//[^a-z0-9_]/_}"
+        local corrected_name="${name//[^a-z0-9_]/}"
+        if [[ -z "$corrected_name" ]]; then
+            printError "Schema name cannot be corrected to a valid name"
+            return 1
+        fi
         echo "Incorrect name convention. We corrected it to $corrected_name"
         name="$corrected_name"
     fi
