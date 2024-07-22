@@ -16,7 +16,7 @@ parseCommand(){
         CREATE)
             if [[ $1 == "SCHEMA" ]]; then
                 shift
-                ./createSchema.sh "$@"
+                ./databases/createSchema.sh "$@"
             elif [[ $1 == "TABLE" ]]; then
                 ./createTable.sh "${@:2}"
             else
@@ -44,13 +44,29 @@ fi
 
 parseCommand "$@"
 
+createTableParse(){
+# CREATE TABLE : t1
+# CREATE TABLE : lookup (id INT, name STRING)
+# CREATE TABLE Persons (
+#     ID int NOT NULL,
+#     LastName String NOT NULL,
+#     FirstName String,
+#     Age int,
+#     PRIMARY KEY (ID)
+# );
+# CREATE TABLE Persons (
+#     ID int NOT NULL,
+#     LastName String NOT NULL,
+#     FirstName String,
+#     Age int,
+#       CONSTRAINT PK_Person PRIMARY KEY (ID,LastName)
+# );
+# logic => after getting the name make a dilemeter ',' and check after dilemeter for the name then type and then search for PK statement if not stated by default the first is pk and print message for such case
+ local tableName=$1
+ if [[ $# -gt 1 ]]
+ then
+    shift
 
-# echo "Case-insensitive comparison example:"
-# str1="apple"
-# str2="Apple"
-
-# if [[ "$str1" == "$str2" ]]; then
-#   echo "Strings are equal (case-insensitive)"
-# else
-#   echo "Strings are not equal"
-# fi
+    local tableFields=$*;
+ fi
+}
