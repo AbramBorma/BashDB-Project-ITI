@@ -1,5 +1,5 @@
-col1:col2:col3:col4
-int:string:int:string
-0:0:pk:0
-1:mohamed:1:ahmed
-1:hello:2:world
+col1|col2|col3|col4
+int|string|int|string
+0|0|PK|0
+2|updatedNew|1|ahmed
+2|mohamed|2|world
