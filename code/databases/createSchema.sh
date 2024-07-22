@@ -23,4 +23,6 @@ then
     exit 1
 fi
 mkdir "../mySchemas/$schemaName"
+echo ""
 echo "Schema $schemaName created"
+echo ""

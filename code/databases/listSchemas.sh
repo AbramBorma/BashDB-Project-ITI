@@ -5,7 +5,12 @@ DB_ROOT="../mySchemas"
 
 listDatabases() {
 
+    echo "***** Listing Schemas *****"
+    echo ""
     echo "The Available Schemas Are:"
+    echo ""
+
+    counter=1
 
     for schema in "$DB_ROOT"/*
 
@@ -15,7 +20,8 @@ listDatabases() {
 
         then
 
-            echo  "$(basename "$schema")"
+            echo  "$counter- $(basename "$schema")"
+            ((counter++))
         fi
 
     done
@@ -23,9 +29,4 @@ listDatabases() {
 }
 
 listDatabases
-
-cd ../code
-
-echo "*****************************"
-
-navigationMenu
+echo ""

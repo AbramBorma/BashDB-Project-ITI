@@ -1,5 +1,6 @@
 #!/bin/bash
 
+DB_ROOT="../mySchemas"
 
 printError() {
     echo "Error: $1" 
@@ -68,19 +69,19 @@ validateAndCorrectName() {
 
 navigationMenu () {
 
-    echo "What do you want to do?"
+    echo "***** What Do You Want to Do? *****"
+    echo ""
     echo "1- Go to Schemas Menu."
-    echo "2- Go to Tables Menu."
-    echo "3 Exit"
+    echo "2 Exit"
+    echo ""
     read -r -p "Choose an option: " option
+    echo ""
 
     case $option in
 
-        1) source ./mainMenu.sh && main_menu
+        1) source ./mainMenu.sh main_menu
     ;;
-        2) source ./tableMenu.sh && table_menu
-    ;;
-        3) exit 0
+        2) exit 0
     ;;
         *) echo "Invalid Option!"; navigationMenu
     ;;

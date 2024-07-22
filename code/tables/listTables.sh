@@ -1,5 +1,4 @@
 #!/bin/bash
-pwd
 source ./utils/helperFunctions.sh
 
 listTables(){
@@ -17,7 +16,7 @@ listTables(){
             index=$((index + 1))
         fi
     done
-       if [[ ${#tables[@]} -eq 0 ]]; then
+    if [[ ${#tables[@]} -eq 0 ]]; then
         printError "No tables found."
         return 1
     fi
@@ -35,4 +34,5 @@ if [[ $# -ne 1 ]]; then
     exit 1
 fi
 listTables "$1"
+export selectedTable
 
