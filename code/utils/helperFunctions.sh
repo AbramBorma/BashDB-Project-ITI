@@ -13,8 +13,9 @@ checkSchemaExistance(){
     return 0
 }
 checkTableExistance(){
-    if [[ ! -f "$1/$2.txt" ]]
+    if [[ ! -f "$DB_ROOT/$1/$2" ]]
     then 
+        echo 
         printError "Table $2 does not exist in schema '$1'"
         return 1
     fi
@@ -127,6 +128,36 @@ checkPrimaryKeyConstraint() {
             printError "Primary key constraint violation: $value already exists"
             return 1
         fi
+    fi
+    return 0
+}
+
+checkValueType() {
+    local schema="$1"
+    local table="$2"
+    local column="$3"
+    local value="$4"
+    local header
+    local types
+    local colIndex
+
+    header=$(head -n 1 "$DB_ROOT/$schema/$table")
+    types=$(sed -n '2p' "$DB_ROOT/$schema/$table")
+
+    colIndex=$(echo "$header" | tr '|' '\n' | grep -nx "$column" | cut -d: -f1)
+
+    if [[ -z "$colIndex" ]]; then
+        printError "Column '$column' not found in table '$table' within schema '$schema'"
+        return 1
+    fi
+
+    colType=$(echo "$types" | cut -d'|' -f"$colIndex")
+
+    if [[ "$colType" == "int" ]]; then
+        isInteger "$value" || { printError "Value '$value' is not an integer"; return 1; }
+    elif [[ "$colType" != "string" ]]; then
+        printError "Unknown type '$colType' for column '$column'"
+        return 1
     fi
     return 0
 }
