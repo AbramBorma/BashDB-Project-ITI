@@ -1,12 +1,16 @@
 #!/bin/bash
 source ./utils/helperFunctions.sh
-
 DB_ROOT="../mySchemas"
+
+source ./databases/listSchemas.sh listDatabases
+echo "***** Select a Schema *****"
+echo ""
 
 while true
 do
 
     read -r -p "Please Enter the Schema Name: " dbName
+    echo ""
 
     dbName="${dbName,,}"
 
@@ -36,10 +40,10 @@ do
 
 done
 
-echo "Connecting to schema: $dbName"
+echo "Connecting to '$dbName' Schema..."
 
 sleep 2
 
-# source ./tableMenu.sh "$dbName" && table_menu 
+echo ""
 
 export dbName

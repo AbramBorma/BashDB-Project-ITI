@@ -2,25 +2,33 @@
 
 source ./utils/helperFunctions.sh
 
+echo "***** Deleting a Schema *****"
+echo ""
 # Start Update from Abram
 listDatabases() {
     DB_ROOT="../mySchemas"
     echo "The Available Schemas Are:"
+    echo ""
+    counter=1
     for schema in "$DB_ROOT"/*; do
         if [[ -d "$schema" ]]; then
-            echo "$(basename "$schema")"
+            echo "$counter- $(basename "$schema")"
+            ((counter++))
         fi
     done
 }
 
 listDatabases
+echo ""
 # End Update from Abram
 
 deleteSchema() {
     local schemaName="$1"
     checkSchemaExistance "$schemaName"
     rm -r "../mySchemas/$schemaName"
+    echo ""
     echo "Schema $schemaName dropped"
+    echo ""
     return 0
 }
 
