@@ -23,7 +23,7 @@ update_table() {
     local header
     header=$(head -n 1 "$table_path")
     local match_index
-    match_index=$(echo "$header" | tr '|' '\n' | grep -nx "$matchCol" | cut -d: -f1)
+    match_index=$(awk -F'|' -v col="$matchCol" '{ for (i=1; i<=NF; i++) if ($i==col) print i }' <<< "$header")
 
 
     if [ -z "$match_index" ]; then
@@ -48,19 +48,25 @@ update_table() {
     # Update the table with the new value
     local tmp_file
     tmp_file=$(mktemp)
-    sed '1,3d' "$table_path" | while IFS='|' read -r -a row; do
+    local update_count=0
+    while IFS='|' read -r -a row; do
         if [ "${row[$match_index_zero_based]}" == "$matchVal" ]; then
+            ((update_count++))
             row[$match_index_zero_based]=$newVal
         fi
         echo "${row[*]}" | tr ' ' '|' >> "$tmp_file"
-    done
+    done < <(sed '1,3d' "$table_path")
 
     # Re-add header, types, PK rows
     head -n 3 "$table_path" > "${tmp_file}.tmp"
     cat "$tmp_file" >> "${tmp_file}.tmp"
     mv "${tmp_file}.tmp" "$table_path"
     rm "$tmp_file"
-    echo "Table '${table%.txt}' updated in schema '$schema'."
+    if [ "$update_count" -eq 0 ]; then
+        echo "No rows were updated."
+    else
+        echo "$update_count row(s) affected."
+    fi
 }
 
 if [ $# -ne 2 ]; then

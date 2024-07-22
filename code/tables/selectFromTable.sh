@@ -48,7 +48,7 @@ returnAllColData() {
         }
         print header
     }
-    NR > 4 {
+    NR > 3 {
         line = ""
         for (j in c) {
             col_idx = colname[c[j]]
@@ -73,7 +73,7 @@ returnAllData() {
 
 extractColandRow() {
     local schema="$1"
-    local table="$2"
+    local table="$2.txt"
     echo "How do you want to fetch the table data?"
     echo "1- All table data"
     echo "2- Certain table column/s"
