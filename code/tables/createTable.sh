@@ -20,6 +20,7 @@ createTable() {
     while true
     do
         read -r -p "Enter the Table Name: " tableName
+        echo ""
 
         if [[ -z "$tableName" ]]
         then
@@ -45,6 +46,7 @@ createTable() {
     done
 
     echo "***** Your Table Name is: $tableName *****"
+    echo ""
 
     while true
     do
@@ -58,7 +60,7 @@ createTable() {
         then
             printError "Number of columns must be an integer."
 
-        elif [[ "$numCols" -le 0 ]]
+        elif [[ "$numCols" -le 1 ]]
         then
             printError "Number of columns must be greater than zero."
 
@@ -69,8 +71,9 @@ createTable() {
     done
 
     echo "***** You Selected the Number of Columns to be: $numCols *****"
+    echo ""
 
-    allowedTypes=("INT" "STRING" "REAL" "DATE")
+    allowedTypes=("INT" "STRING")
 
     for ((i = 1; i <= numCols; i++))
     do
@@ -87,6 +90,9 @@ createTable() {
             then
                 printError "Column Name Must Be One Word Only."
 
+            elif [[ "$tableName" =~ ^[0-9]+$ ]]
+            then
+                printError "Column Name Can Not Be a Number."
             else
                 duplicate=false
                 for existingColName in "${colNames[@]}"; do
@@ -105,7 +111,9 @@ createTable() {
 
         while true
         do
-            read -r -p "Enter the Type of Column $i (INT, STRING, REAL, DATE): " colType
+            read -r -p "Enter the Type of Column $i (INT, STRING): " colType
+
+            colType="${colType^^}"
 
             if [[ " ${allowedTypes[*]} " =~ " $colType " ]]
             then
@@ -164,6 +172,8 @@ createTable() {
 
     echo ""
     echo "Table $tableName created with columns saved in $tableFile."
+    echo "$dbName"
+    echo "$tableName"
     afterTableCreation "$dbName" "$tableName"
 }
 
@@ -175,24 +185,25 @@ afterTableCreation() {
     do
         echo ""
         echo "***** How Do You Want to Manipulate $tableName Table? *****"
+        echo ""
         echo "1- Insert Into Table"
-        echo "2- Delete From Table"
-        echo "3- Drop Table"
-        echo "4- Go Back to Table Menu"
-        echo "5- Exit"
+        echo "2- Drop Table"
+        echo "3- Go Back to Table Menu"
+        echo "4- Exit"
         echo ""
         read -r -p "Choose an Option: " choice
         echo ""
 
         case $choice in 
-            1) ./tables/insertIntoTable.sh "$dbName" "$tableName" ;;
-            2) ./tables/deleteFromTable.sh "$dbName" "$tableName" ;;
-            3) ./tables/dropTable.sh "$dbName" "$tableName" ;;
-            4) source ./tableMenu.sh "$dbName" ;;
-            5) exit 0 ;;
-            *) echo "Invalid option";;
+            1) source ./tables/insertIntoTable.sh "$dbName" "$tableName" ;;
+            2) source ./tables/dropTable.sh "$dbName" "$tableName" ;;
+            3) source ./tableMenu.sh "$dbName" ;;
+            4) exit 0 ;;
+            *) echo "Invalid option"; afterTableCreation;;
         esac
     done
 }
 
 createTable "$1"
+export dbName
+export tableName

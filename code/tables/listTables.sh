@@ -9,6 +9,7 @@ listTables(){
 
 
   echo "Tables in schema $schemaName:"
+  echo ""
     for table in ../mySchemas/"$schemaName"/*.txt; do
         if [[ -f "$table" && "$table" != *"-meta.txt" ]]; then
             tables+=("$(basename "$table" .txt)")
@@ -20,13 +21,13 @@ listTables(){
         printError "No tables found."
         return 1
     fi
+    echo ""
     read -r -p "Enter the number of the table: " tableNumber
     if [[ $tableNumber -le 0 || $tableNumber -gt ${#tables[@]} ]]; then
         printError "Invalid selection."
         return 1
     fi
     selectedTable="${tables[$((tableNumber-1))]}"
-    echo "$selectedTable"
     return 0
 }
 if [[ $# -ne 1 ]]; then
@@ -34,5 +35,4 @@ if [[ $# -ne 1 ]]; then
     exit 1
 fi
 listTables "$1"
-export selectedTable
 
