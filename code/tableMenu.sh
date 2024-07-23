@@ -25,7 +25,7 @@ table_menu() {
 
        case $table_choice in
         1) source ./tables/createTable.sh "$schemaName";;
-        2) ./tables/listTables.sh "$schemaName" ;;
+        2) listTablesMenu "$schemaName" ;;
         3) source ./tables/listTables.sh "$schemaName"
            source ./tables/selectFromTable.sh "$schemaName" "$selectedTable" 
         ;;
