@@ -1,5 +1,10 @@
-col1|col2|col3|col4
-INT|STRING|INT|STRING
-0|0|PK|0
-3|updatedNew|1|ahmed
-3|updated|2|world
+col1   | col2   | col3  
+col4   |        |       
+INT    | STRING | INT   
+STRING |        |       
+0      | 0      | PK    
+0      |        |       
+2      | updatedNew | 1     
+ahmed  |        |       
+2      | updated | 2     
+world  |        |       

@@ -1,0 +1,5 @@
+id     | name   |       
+INT    | STRING |       
+PK     |        |       
+1      | Abram  |       
+2      | ko     |       
