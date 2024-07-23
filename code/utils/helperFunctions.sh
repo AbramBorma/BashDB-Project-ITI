@@ -121,6 +121,10 @@ isInteger() {
     local value="$1"
     [[ "$value" =~ ^-?[0-9]+$ ]]
 }
+trim() {
+    echo "$1" | sed 's/^[ \t]*//;s/[ \t]*$//'
+}
+
 
 checkPrimaryKeyConstraint() {
     local schema="$1"
@@ -154,18 +158,21 @@ checkValueType() {
     header=$(head -n 1 "$DB_ROOT/$schema/$table")
     types=$(sed -n '2p' "$DB_ROOT/$schema/$table")
 
-    colIndex=$(echo "$header" | tr '|' '\n' | grep -nx "$column" | cut -d: -f1)
+    colIndex=$(echo "$header" | tr '|' '\n' | awk -v col="$column" '{
+        gsub(/^[ \t]+|[ \t]+$/, "", $0);  # Trim spaces
+        if ($0 == col) print NR
+    }')
 
     if [[ -z "$colIndex" ]]; then
         printError "Column '$column' not found in table '$table' within schema '$schema'"
         return 1
     fi
 
-    colType=$(echo "$types" | cut -d'|' -f"$colIndex")
+    colType=$(echo "$types" | cut -d'|' -f"$colIndex" | sed 's/^[ \t]*//;s/[ \t]*$//')  # Trim spaces
 
-    if [[ "$colType" == "int" ]]; then
+    if [[ "$colType" == "INT" ]]; then
         isInteger "$value" || { printError "Value '$value' is not an integer"; return 1; }
-    elif [[ "$colType" != "string" ]]; then
+    elif [[ "$colType" != "STRING" ]]; then
         printError "Unknown type '$colType' for column '$column'"
         return 1
     fi
