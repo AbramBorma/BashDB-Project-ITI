@@ -8,8 +8,10 @@ update_table() {
 
     checkSchemaExistance "$schema" || exit 1
     checkTableExistance "$schema" "$table" || exit 1
-
+    
+    printf "\n"
     read -r -p "Enter the column name to match and update (or type \back to go to menu): " matchCol
+    printf "\n"
     if [[ "$matchCol" == "\\back" ]]; then
         ./tableMenu.sh "$schema"
         return 1

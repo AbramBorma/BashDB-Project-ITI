@@ -90,7 +90,7 @@ createTable() {
             then
                 printError "Column Name Must Be One Word Only."
 
-            elif [[ "$tableName" =~ ^[0-9]+$ ]]
+            elif [[ "$colName" =~ ^[0-9]+$ ]]
             then
                 printError "Column Name Can Not Be a Number."
             else
@@ -195,11 +195,11 @@ afterTableCreation() {
         echo ""
 
         case $choice in 
-            1) source ./tables/insertIntoTable.sh "$dbName" "$tableName" ;;
-            2) source ./tables/dropTable.sh "$dbName" "$tableName" ;;
-            3) source ./tableMenu.sh "$dbName" ;;
+            1) ./tables/insertIntoTable.sh "$dbName" "$tableName" ;;
+            2) ./tables/dropTable.sh "$dbName" "$tableName" ;;
+            3) ./tableMenu.sh "$dbName" ;;
             4) exit 0 ;;
-            *) echo "Invalid option"; afterTableCreation;;
+            *) echo "Invalid option";;
         esac
     done
 }

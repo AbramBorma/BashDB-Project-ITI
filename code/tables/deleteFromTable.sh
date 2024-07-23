@@ -64,20 +64,21 @@ deleteByCondition() {
         echo "- $col"
     done
 
-    read -r -p "Enter the Column Name for the Condition: " colName
-    echo ""
-    read -r -p "Enter the Value to Match: " matchValue
-    echo ""
-
     while true
     do
-        if [[ ! " ${colNames[*]} " =~ " $colName " ]]
+
+        read -r -p "Enter the Column Name for the Condition: " colName
+        echo ""
+        if ! [[ " ${colNames[*]} " =~ " $colName " ]] 
         then
             printError "Invalid Column Name!"
         else
             break
         fi
     done
+
+    read -r -p "Enter the Value to Match: " matchValue
+    echo ""
 
     for i in "${!colNames[@]}"
     do
@@ -94,7 +95,7 @@ deleteByCondition() {
 
 }
 
-
+echo ""
 echo "***** Choose Deletion Method *****"
 echo ""
 echo "1- Delete by Row Number"
