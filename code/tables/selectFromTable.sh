@@ -6,18 +6,27 @@ selectFromTable() {
     local table="$2"
     local column="$3"
     local value="$4"
-    # go to match the col then if we match we go to match rows 
+    
     awk -F'|' -v col="$column" -v val="$value" '
-    NR == 1 { split($0, cols, FS) }
+    function trim(str) {
+        gsub(/^[ \t]+|[ \t]+$/, "", str)
+        return str
+    }
+    NR == 1 {
+        for (i = 1; i <= NF; i++) {
+            cols[i] = trim($i)
+        }
+        print $0  # Print the header
+    }
     NR > 3 {
         for (i = 1; i <= NF; i++) {
-            if (cols[i] == col && $i == val) {
+            if (cols[i] == trim(col) && trim($i) == trim(val)) {
                 print $0
             }
         }
     }' "$DB_ROOT/$schema/$table"
-    # adjusting NR > 3 based on the meta data waiting for create table method
 }
+
 
 # c[1] = "name"
 # c[2] = "age"
@@ -31,12 +40,19 @@ returnAllColData() {
     local columns=("$@")
 
     awk -F'|' -v cols="${columns[*]}" '
+    function trim(str) {
+        gsub(/^[ \t]+|[ \t]+$/, "", str)
+        return str
+    }
     BEGIN { 
         split(cols, c, " ")
+        for (j in c) {
+            c[j] = trim(c[j])
+        }
     }
     NR == 1 { 
         for (i = 1; i <= NF; i++) {
-            colname[$i] = i
+            colname[trim($i)] = i
         }
         header = ""
         for (j in c) {
@@ -78,7 +94,7 @@ extractColandRow() {
     echo "1- All table data"
     echo "2- Certain table column/s"
     echo "3- Select table row/s"
-    echo "4- Exit"
+    echo "4- Back to Table Menu"
     read -r -p "Choose an option: " method
 
     case $method in
@@ -116,10 +132,10 @@ extractColandRow() {
 while true
 do
     printf "\n"
-    echo "***** You Are Now Selecting From Table $tableName *****"
+    echo "***** You Are Now Selecting From Table $2 *****"
     printf "\n"
     extractColandRow $1 $2
     if [[ $? -eq 1 ]]; then
-        break
+        ./tableMenu.sh $1
     fi
 done

@@ -95,18 +95,27 @@ checkColumnExistance() {
     local column="$3"
     local header
     header=$(head -n 1 "$DB_ROOT/$schema/$table")
+    
     if [[ -z "$header" ]]; then
         printError "The table header is empty or the table does not exist"
         return 1
     fi
 
-    if [[ "$header" =~ (^|'|')"$column"('|'|$) ]]; then
-        return 0
-    else
-        printError "Column '$column' doesn't exist in table '$table' within schema '$schema'"
-        return 1
-    fi
+    trim() {
+        echo "$1" | sed 's/^[ \t]*//;s/[ \t]*$//'
+    }
+    column=$(trim "$column")
+    IFS='|' read -ra cols <<< "$header"
+    for col in "${cols[@]}"; do
+        if [[ "$(trim "$col")" == "$column" ]]; then
+            return 0
+        fi
+    done
+
+    printError "Column '$column' doesn't exist in table '$table' within schema '$schema'"
+    return 1
 }
+
 
 isInteger() {
     local value="$1"
