@@ -168,7 +168,7 @@ checkValueType() {
         return 1
     fi
 
-    colType=$(echo "$types" | cut -d'|' -f"$colIndex" | sed 's/^[ \t]*//;s/[ \t]*$//')  # Trim spaces
+    colType=$(echo "$types" | cut -d'|' -f"$colIndex" | sed 's/^[ \t]*//;s/[ \t]*$//')  
 
     if [[ "$colType" == "INT" ]]; then
         isInteger "$value" || { printError "Value '$value' is not an integer"; return 1; }
@@ -177,4 +177,33 @@ checkValueType() {
         return 1
     fi
     return 0
+}
+
+listTablesMenu(){
+    local schemaName="$1"
+    checkSchemaExistance "$schemaName"
+
+    local index=1
+
+    echo "Tables in schema $schemaName:"
+    echo ""
+    for table in ../mySchemas/"$schemaName"/*.txt; do
+        if [[ -f "$table" ]]; then
+            tables+=("$(basename "$table" .txt)")
+            echo "$index. $(basename "$table" .txt)"
+            index=$((index + 1))
+        fi
+    done
+    if [[ ${#tables[@]} -eq 0 ]]; then
+        printError "No tables found."
+        return 1
+    fi
+    echo ""
+    read -r -p "Type \back to go to the Previouse Menu " listCommand
+    if [[ $listCommand -ne "\back" ]]; then
+        printError "Invalid selection."
+        return 1
+        else
+        ./tableMenu.sh $schemaName
+    fi
 }

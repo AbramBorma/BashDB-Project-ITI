@@ -16,6 +16,7 @@ fi
 listRows() {
     echo ""
     echo "Rows in '$tableName' Table are: "
+    awk 'NR == 1 {print $0}' "$tableFile"
     awk 'NR > 3 {print NR-3 ": " $0}' "$tableFile"
 }
 listRows
@@ -89,8 +90,23 @@ deleteByCondition() {
         fi
     done
 
+    local countBefore=$(awk -F' \\| ' -v colIndex=$colIndex -v matchValue="$matchValue" '
+    NR > 3 && $colIndex == matchValue {count++}
+    END {print count}' "$tableFile")
+
+
     awk -F' \\| ' -v colIndex=$colIndex -v matchValue="$matchValue" 'NR <= 3 || $colIndex != matchValue' "$tableFile" > temp && mv temp "$tableFile"
-    echo "Rows Matching Condition '$colName = $matchValue' are Deleted from '$tableName' Table."
+
+    local countAfter=$(awk -F' \\| ' -v colIndex=$colIndex -v matchValue="$matchValue" '
+    NR > 3 && $colIndex == matchValue {count++}
+    END {print count}' "$tableFile")
+
+    if (( countBefore > countAfter )); then
+        echo "Rows matching condition '$colName = $matchValue' were deleted from '$tableFile' table."
+    else
+        echo "No rows matching condition '$colName = $matchValue' were found in '$tableFile' table."
+    fi
+
     echo ""
 
 }
