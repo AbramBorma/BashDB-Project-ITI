@@ -103,14 +103,23 @@ extractColandRow() {
                 printError "Invalid column name: $matchCol"
                 return 1
             fi
-            read -p "Enter the value you want to match: " value
+            read -r -p "Enter the value you want to match: " value
             selectFromTable "$schema" "$table" "$matchCol" "$value"
             ;;
-        4)
+        4) return 1
             ;;
         *)
             echo "Invalid command"
             ;;
     esac
 }
-extractColandRow $1 $2
+while true
+do
+    printf "\n"
+    echo "***** You Are Now Selecting From Table $tableName *****"
+    printf "\n"
+    extractColandRow $1 $2
+    if [[ $? -eq 1 ]]; then
+        break
+    fi
+done

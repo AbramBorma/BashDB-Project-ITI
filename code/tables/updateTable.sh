@@ -9,7 +9,11 @@ update_table() {
     checkSchemaExistance "$schema" || exit 1
     checkTableExistance "$schema" "$table" || exit 1
 
-    read -r -p "Enter the column name to match and update: " matchCol
+    read -r -p "Enter the column name to match and update (or type \back to go to menu): " matchCol
+    if [[ "$matchCol" == "\\back" ]]; then
+        ./tableMenu.sh "$schema"
+        return 1
+    fi
     checkColumnExistance "$schema" "$table" "$matchCol" || exit 1
 
     read -r -p "Enter the value to match: " matchVal
@@ -34,7 +38,7 @@ update_table() {
 
     # Check for primary key constraint violation
     local pkRow
-    pkRow=$(sed -n '3p' "$table_path")
+    pkRow=$(sed -n '3p' "$table_path")match_index
     local pkFlag
     pkFlag=$(echo "$pkRow" | cut -d'|' -f"$match_index")
 
@@ -74,7 +78,15 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-schema_name=$1
-table_name=$2
-
-update_table "$schema_name" "$table_name"
+schemaName=$1
+tableName=$2
+while true
+do
+    printf "\n"
+    echo "***** You Are Now Updating Table $tableName Content *****"
+    printf "\n"
+    update_table "$schemaName" "$tableName"
+        if [[ $? -eq 1 ]]; then
+            break
+        fi
+done

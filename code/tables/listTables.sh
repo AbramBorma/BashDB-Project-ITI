@@ -11,7 +11,7 @@ listTables(){
   echo "Tables in schema $schemaName:"
   echo ""
     for table in ../mySchemas/"$schemaName"/*.txt; do
-        if [[ -f "$table" && "$table" != *"-meta.txt" ]]; then
+        if [[ -f "$table" ]]; then
             tables+=("$(basename "$table" .txt)")
             echo "$index. $(basename "$table" .txt)"
             index=$((index + 1))
