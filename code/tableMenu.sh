@@ -11,12 +11,13 @@ table_menu() {
     echo ""
     echo "1- Create Table"
     echo "2- List Tables"
-    echo "3- Select Table"
-    echo "4- Delete Entire Table"
+    echo "3- Select from Table"
+    echo "4- Delete from Table"
     echo "5- Insert Into Table"
     echo "6- Update Table Content"
-    echo "7- Back to Main Menu"
-    echo "8- Exit"
+    echo "7- Drop Table"
+    echo "8- Back to Main Menu"
+    echo "9- Exit"
     echo ""
     read -r -p "Choose an option: " table_choice
     echo ""
@@ -29,24 +30,27 @@ table_menu() {
             ./tables/selectFromTable.sh "$schemaName" "$selectedTable" 
         fi
         ;;
-        4)selectedTable=$(./tables/listTables.sh "$schemaName")
-        if [[ $? -eq 0 ]]; then 
-            ./tables/deleteTable.sh "$schemaName" "$selectedTable" 
-        fi
+        4) echo "***** Select the Table you Want to Delete from, from the Below List *****"
+           echo ""
+           source ./tables/listTables.sh "$schemaName"
+           source ./tables/deleteFromTable.sh "$schemaName" "$selectedTable" 
         ;;
-        5) ./tables/listTables.sh "$schemaName"
-        selectedTable=$(./tables/listTables.sh "$schemaName")
-        if [[ $? -eq 0 ]]; then 
-            ./tables/insertIntoTable.sh "$schemaName" "$selectedTable" 
-        fi
+        5) source ./tables/listTables.sh "$schemaName"
+           source ./tables/insertIntoTable.sh "$schemaName" "$selectedTable" 
         ;;
         6) selectedTable=$(./listTables.sh "$schemaName")
         if [[ $? -eq 0 ]]; then 
             ./tables/updateTable.sh "$schemaName" "$selectedTable" 
         fi
         ;;
-        7) source ./mainMenu.sh && main_menu ;;
-        8) cd ..; return 0 ;;
+        7) echo "***** Select the Table you Want to DROP from the Below List *****"
+           echo ""
+           source ./tables/listTables.sh "$schemaName"
+           source ./tables/dropTable.sh "$schemaName" "$selectedTable" 
+
+        ;; 
+        8) source ./mainMenu.sh && main_menu ;;
+        9) exit 0 ;;
 
         *) echo "Invalid option"; table_menu;;
     esac
