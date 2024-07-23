@@ -11,8 +11,11 @@ update_table() {
     
     printf "\n"
     read -r -p "Enter the column name to match and update (or type \back to go to menu): " matchCol
+
     printf "\n"
     if [[ "$matchCol" == "\\back" ]]; then
+
+
         ./tableMenu.sh "$schema"
         return 1
     fi
@@ -29,8 +32,12 @@ update_table() {
     local header
     header=$(head -n 1 "$table_path")
     local match_index
-    match_index=$(awk -F'|' -v col="$matchCol" '{ for (i=1; i<=NF; i++) if ($i==col) print i }' <<< "$header")
-
+    match_index=$(awk -F'|' -v col="$matchCol" '{
+        for (i=1; i<=NF; i++) {
+            gsub(/^[ \t]+|[ \t]+$/, "", $i);  # Trim spaces
+            if ($i==col) print i
+        }
+    }' <<< "$header")
 
     if [ -z "$match_index" ]; then
         printError "Column index not found"
@@ -40,7 +47,7 @@ update_table() {
 
     # Check for primary key constraint violation
     local pkRow
-    pkRow=$(sed -n '3p' "$table_path")match_index
+    pkRow=$(sed -n '3p' "$table_path")
     local pkFlag
     pkFlag=$(echo "$pkRow" | cut -d'|' -f"$match_index")
 
@@ -51,21 +58,44 @@ update_table() {
         fi
     fi
 
+    # Find the maximum length of any column name/type/pk to format the output
+    IFS='|' read -r -a colNames <<< "$(head -n 1 "$table_path" | tr -d ' ')"
+    IFS='|' read -r -a colTypes <<< "$(sed -n '2p' "$table_path" | tr -d ' ')"
+    IFS='|' read -r -a colPKs <<< "$(sed -n '3p' "$table_path" | tr -d ' ')"
+
+    local maxLen=0
+    for col in "${colNames[@]}" "${colTypes[@]}" "${colPKs[@]}"; do
+        len=${#col}
+        if (( len > maxLen )); then
+            maxLen=$len
+        fi
+    done
+
+    local format="%-${maxLen}s | %-${maxLen}s | %-${maxLen}s\n"
+
     # Update the table with the new value
     local tmp_file
     tmp_file=$(mktemp)
     local update_count=0
     while IFS='|' read -r -a row; do
+        for i in "${!row[@]}"; do
+            row[$i]=$(echo "${row[$i]}" | sed 's/^[ \t]*//;s/[ \t]*$//')  # Trim spaces
+        done
         if [ "${row[$match_index_zero_based]}" == "$matchVal" ]; then
             ((update_count++))
             row[$match_index_zero_based]=$newVal
         fi
-        echo "${row[*]}" | tr ' ' '|' >> "$tmp_file"
+        printf "$format" "${row[@]}" >> "$tmp_file"
     done < <(sed '1,3d' "$table_path")
 
-    # Re-add header, types, PK rows
-    head -n 3 "$table_path" > "${tmp_file}.tmp"
-    cat "$tmp_file" >> "${tmp_file}.tmp"
+    # Re-add header, types, PK rows with formatting
+    {
+        printf "$format" "${colNames[@]}"
+        printf "$format" "${colTypes[@]}"
+        printf "$format" "${colPKs[@]}"
+        cat "$tmp_file"
+    } > "${tmp_file}.tmp"
+
     mv "${tmp_file}.tmp" "$table_path"
     rm "$tmp_file"
     if [ "$update_count" -eq 0 ]; then
@@ -88,7 +118,7 @@ do
     echo "***** You Are Now Updating Table $tableName Content *****"
     printf "\n"
     update_table "$schemaName" "$tableName"
-        if [[ $? -eq 1 ]]; then
-            break
-        fi
+    if [[ $? -eq 1 ]]; then
+        break
+    fi
 done
