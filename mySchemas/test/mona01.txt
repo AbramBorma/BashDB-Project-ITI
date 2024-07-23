@@ -1,0 +1,4 @@
+id     | name   |       
+INT    | STRING |       
+PK     |        |       
+1      | mona   | 

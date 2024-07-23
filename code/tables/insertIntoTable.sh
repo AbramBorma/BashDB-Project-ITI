@@ -138,6 +138,20 @@ insert_into_table() {
     echo ""
     echo "***** What Else Do you Want to Do? *****"
     echo ""
+
+    echo "1- Insert More Records"
+    echo "2- Go Back to Table Menu"
+    echo "3- Go to Main Menu"
+    echo "4- Exit"
+    read -r -p "Choose an option: " ioption
+
+    case $ioption in
+        1) ./tables/insertIntoTable.sh "$dbName" "$tableName";;
+        2) ./tableMenu.sh "$dbName";;
+        3) ./mainMenu.sh;;
+        4) exit 0;;
+        *) echo "Invalid Option!";;
+    esac
 }
 
 if [[ $# -ne 2 ]]; then
@@ -147,27 +161,5 @@ fi
 
 insert_into_table "$1" "$2"
 
-echo "1- Insert More Records"
-echo "2- Go Back to Table Menu"
-echo "3- Go to Main Menu"
-echo "4- Exit"
-read -r -p "Choose an option: " ioption
-
-case $ioption in
-    1)
-        source ./tables/insertIntoTable.sh "$dbName" "$tableName"
-    ;;
-    2)
-        source ./tableMenu.sh "$dbName"
-    ;;
-    3)
-        source ./mainMenu.sh
-    ;;
-    4) 
-        exit 0
-    ;;
-    *) 
-        echo "Invalid Option!"; 
-        source ./tableMenu.sh "$dbName"
-    ;;
-esac
+export dbName
+export tableName

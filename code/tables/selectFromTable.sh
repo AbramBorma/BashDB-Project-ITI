@@ -91,10 +91,12 @@ extractColandRow() {
     local schema="$1"
     local table="$2.txt"
     echo "How do you want to fetch the table data?"
+    echo ""
     echo "1- All table data"
     echo "2- Certain table column/s"
     echo "3- Select table row/s"
     echo "4- Back to Table Menu"
+    echo ""
     read -r -p "Choose an option: " method
 
     case $method in
