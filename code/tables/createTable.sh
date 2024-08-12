@@ -4,6 +4,18 @@ source ./utils/helperFunctions.sh
 
 DB_ROOT="../mySchemas"
 
+reserved_words=("select" "from" "where" "insert" "update" "delete" "create" "drop" "table" "database" "schema")
+
+isReservedWord() {
+    local word="$1"
+    for reserved in "${reserved_words[@]}"; do
+        if [[ "$word" == "$reserved" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 echo "***** Create Tables in Schema: $dbName *****"
 echo ""
 
@@ -34,6 +46,14 @@ createTable() {
         then
             printError "Table Name Must Be One Word Only."
 
+        elif [[ "$tableName" == *\\* ]]
+        then
+            printError "Table Name Can Not Contain a Backslash."
+
+        elif isReservedWord "$tableName"
+        then
+            printError "Table Name Can Not Be a Reserved Word."
+
         elif [[ -f "$DB_ROOT/$dbName/$tableName.txt" ]]
         then
             printError "Table Name Already Exists in this Schema."
@@ -62,7 +82,7 @@ createTable() {
 
         elif [[ "$numCols" -le 1 ]]
         then
-            printError "Number of columns must be greater than zero."
+            printError "Number of columns must be greater than One."
 
         else
             break
@@ -90,9 +110,18 @@ createTable() {
             then
                 printError "Column Name Must Be One Word Only."
 
+            elif [[ "$colName" == *\\* ]]
+            then
+                printError "Column Name Can Not Contain a Backslash."
+
             elif [[ "$colName" =~ ^[0-9]+$ ]]
             then
                 printError "Column Name Can Not Be a Number."
+
+            elif isReservedWord "$colName"
+            then
+                printError "Column Name Can Not Be a Reserved Word."
+
             else
                 duplicate=false
                 for existingColName in "${colNames[@]}"; do

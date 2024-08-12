@@ -124,7 +124,7 @@ extractColandRow() {
             read -r -p "Enter the value you want to match: " value
             selectFromTable "$schema" "$table" "$matchCol" "$value"
             ;;
-        4) return 1
+        4) ./tableMenu.sh "$schema"
             ;;
         *)
             echo "Invalid command"

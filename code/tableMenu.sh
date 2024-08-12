@@ -34,8 +34,8 @@ table_menu() {
            source ./tables/listTables.sh "$schemaName"
            source ./tables/deleteFromTable.sh "$schemaName" "$selectedTable" 
         ;;
-        5) source ./tables/listTables.sh "$schemaName"
-           source ./tables/insertIntoTable.sh "$schemaName" "$selectedTable" 
+        5)  source ./tables/listTables.sh "$schemaName"
+            source ./tables/insertIntoTable.sh "$schemaName" "$selectedTable" 
         ;;
         6) source ./tables/listTables.sh "$schemaName"
             source ./tables/updateTable.sh "$schemaName" "$selectedTable" 
